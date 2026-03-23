@@ -71,9 +71,6 @@ paths:
       responses:
         '201':
           description: Zgłoszenie utworzone.
-          headers:
-            Location:
-              $ref: '#/components/headers/Location'
           content:
             application/json:
               schema:
@@ -83,9 +80,6 @@ paths:
                   $ref: '#/components/examples/TroubleTicketCreatedResponse'
         '200':
           description: Zwrócono istniejące zgłoszenie na podstawie idempotencji `(tenantId, externalId)`.
-          headers:
-            Location:
-              $ref: '#/components/headers/Location'
           content:
             application/json:
               schema:
@@ -253,13 +247,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Bearer token użytkownika lub konta API. Tenant scope wynika wyłącznie z poprawnie zweryfikowanego tokenu.
-
-  headers:
-    Location:
-      description: Kanoniczny adres zasobu Trouble Ticket.
-      schema:
-        type: string
-        format: uri-reference
 
   parameters:
     TroubleTicketId:
