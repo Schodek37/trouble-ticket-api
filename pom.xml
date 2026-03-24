@@ -108,6 +108,7 @@
 							<modelPackage>pl.netia.troubleticket.model</modelPackage>
 							<skipValidateSpec>true</skipValidateSpec>
 							<generateSupportingFiles>true</generateSupportingFiles>
+							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
 								<useSpringBoot3>true</useSpringBoot3>
