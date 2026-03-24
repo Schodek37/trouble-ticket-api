@@ -1,4 +1,4 @@
-package pl.netia.trouble_ticket_api;
+package pl.netia.troubleticket;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
