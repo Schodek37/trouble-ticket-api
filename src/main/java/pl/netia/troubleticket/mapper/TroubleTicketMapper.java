@@ -13,19 +13,15 @@ import pl.netia.troubleticket.model.TroubleTicketSummary;
 @Mapper(componentModel = "spring")
 public interface TroubleTicketMapper {
 
-    // TroubleTicketEntity → TroubleTicket DTO (pełna reprezentacja)
     @Mapping(target = "status", source = "status")
     TroubleTicket toDto(TroubleTicketEntity entity);
 
-    // TroubleTicketEntity → TroubleTicketSummary DTO (lista)
     @Mapping(target = "status", source = "status")
     TroubleTicketSummary toSummaryDto(TroubleTicketEntity entity);
 
-    // NoteEntity → Note DTO
     @Mapping(target = "date", source = "createdAt")
     Note toNoteDto(NoteEntity entity);
 
-    // TicketStatus (encja) → TroubleTicketStatus (API)
     default TroubleTicketStatus toApiStatus(TicketStatus status) {
         return switch (status) {
             case NEW -> TroubleTicketStatus.NEW;
@@ -37,7 +33,6 @@ public interface TroubleTicketMapper {
         };
     }
 
-    // TroubleTicketStatus (API) → TicketStatus (encja)
     default TicketStatus toEntityStatus(TroubleTicketStatus status) {
         return switch (status) {
             case NEW -> TicketStatus.NEW;
