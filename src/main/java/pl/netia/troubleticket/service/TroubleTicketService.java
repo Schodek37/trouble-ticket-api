@@ -28,28 +28,24 @@ public class TroubleTicketService {
     private final TroubleTicketRepository repository;
     private final TroubleTicketMapper mapper;
 
-    // ================================================================
-    // CREATE — idempotencja na (tenantId, externalId)
-    // ================================================================
     @Transactional
     public TroubleTicketCreationResult create(
             TroubleTicketCreateRequest request,
             String tenantId) {
 
-        // Sprawdź idempotencję - czy zgłoszenie już istnieje
         return repository
                 .findByExternalIdAndTenantId(request.getExternalId(), tenantId)
                 .map(existing -> {
                     log.info("Returning existing ticket for externalId={} tenantId={}",
                             request.getExternalId(), tenantId);
-                    // Zwróć istniejące zgłoszenie z flagą że już istniało
+
                     return new TroubleTicketCreationResult(
                             mapper.toDto(existing),
                             false
                     );
                 })
                 .orElseGet(() -> {
-                    // Stwórz nowe zgłoszenie
+
                     NoteEntity firstNote = NoteEntity.builder()
                             .text(request.getNote())
                             .createdAt(OffsetDateTime.now())
@@ -63,7 +59,6 @@ public class TroubleTicketService {
                             .status(TicketStatus.ACKNOWLEDGED)
                             .build();
 
-                    // Powiąż notatkę ze zgłoszeniem
                     firstNote.setTroubleTicket(entity);
                     entity.getNotes().add(firstNote);
 
@@ -78,9 +73,6 @@ public class TroubleTicketService {
                 });
     }
 
-    // ================================================================
-    // LIST — wszystkie zgłoszenia w tenant scope
-    // ================================================================
     @Transactional(readOnly = true)
     public List<TroubleTicketSummary> listAll(String tenantId) {
         return repository.findAllByTenantId(tenantId)
@@ -89,9 +81,6 @@ public class TroubleTicketService {
                 .toList();
     }
 
-    // ================================================================
-    // GET — pojedyncze zgłoszenie w tenant scope
-    // ================================================================
     @Transactional(readOnly = true)
     public TroubleTicket getById(String id, String tenantId) {
         return repository.findByIdAndTenantId(id, tenantId)
@@ -99,9 +88,6 @@ public class TroubleTicketService {
                 .orElseThrow(() -> new TroubleTicketNotFoundException(id));
     }
 
-    // ================================================================
-    // CLOSE — zmiana statusu na closed
-    // ================================================================
     @Transactional
     public TroubleTicket close(String id, String tenantId) {
         TroubleTicketEntity entity = repository
@@ -122,9 +108,6 @@ public class TroubleTicketService {
         return mapper.toDto(saved);
     }
 
-    // ================================================================
-    // ADD NOTE — dodaj notatkę do zgłoszenia
-    // ================================================================
     @Transactional
     public Note addNote(
             String id,
@@ -142,15 +125,17 @@ public class TroubleTicketService {
                 .build();
 
         entity.getNotes().add(note);
-        repository.save(entity);
+
+        TroubleTicketEntity saved = repository.saveAndFlush(entity);
+
+        NoteEntity savedNote = saved.getNotes()
+                .getLast();
+
         log.info("Added note to ticket id={} tenantId={}", id, tenantId);
 
-        return mapper.toNoteDto(note);
+        return mapper.toNoteDto(savedNote);
     }
 
-    // ================================================================
-    // Wewnętrzny record dla wyniku create
-    // ================================================================
     public record TroubleTicketCreationResult(
             TroubleTicket ticket,
             boolean created
