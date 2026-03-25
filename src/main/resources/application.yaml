@@ -29,3 +29,8 @@ logging:
   level:
     pl.netia.troubleticket: DEBUG
     org.flywaydb: INFO
+
+app:
+  security:
+    jwt:
+      secret: "70c9f9ab7c9f923f44a20d57b61b7774f96ad932ec5d43c4c253122df3b9b9ae"

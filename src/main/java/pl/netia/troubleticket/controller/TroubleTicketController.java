@@ -11,6 +11,7 @@ import pl.netia.troubleticket.model.TroubleTicket;
 import pl.netia.troubleticket.model.TroubleTicketCloseStatusRequest;
 import pl.netia.troubleticket.model.TroubleTicketCreateRequest;
 import pl.netia.troubleticket.model.TroubleTicketSummary;
+import pl.netia.troubleticket.security.TenantContext;
 import pl.netia.troubleticket.service.TroubleTicketService;
 
 import java.net.URI;
@@ -22,14 +23,14 @@ import java.util.List;
 public class TroubleTicketController implements TroubleTicketApi {
 
     private final TroubleTicketService service;
+    private final TenantContext tenantContext;
 
-    private static final String TEMP_TENANT_ID = "tenant-1";
 
     @Override
     public ResponseEntity<TroubleTicket> createTroubleTicket(
             TroubleTicketCreateRequest request) {
 
-        var result = service.create(request, TEMP_TENANT_ID);
+        var result = service.create(request, tenantContext.getTenantId());
 
         if (result.created()) {
             return ResponseEntity
@@ -49,12 +50,12 @@ public class TroubleTicketController implements TroubleTicketApi {
 
     @Override
     public ResponseEntity<List<TroubleTicketSummary>> listTroubleTickets() {
-        return ResponseEntity.ok(service.listAll(TEMP_TENANT_ID));
+        return ResponseEntity.ok(service.listAll(tenantContext.getTenantId()));
     }
 
     @Override
     public ResponseEntity<TroubleTicket> getTroubleTicketById(String id) {
-        return ResponseEntity.ok(service.getById(id, TEMP_TENANT_ID));
+        return ResponseEntity.ok(service.getById(id, tenantContext.getTenantId()));
     }
 
     @Override
@@ -68,7 +69,7 @@ public class TroubleTicketController implements TroubleTicketApi {
             );
         }
 
-        return ResponseEntity.ok(service.close(id, TEMP_TENANT_ID));
+        return ResponseEntity.ok(service.close(id, tenantContext.getTenantId()));
     }
 
     @Override
@@ -76,7 +77,7 @@ public class TroubleTicketController implements TroubleTicketApi {
             String id,
             NoteCreateRequest request) {
 
-        Note note = service.addNote(id, TEMP_TENANT_ID, request);
+        Note note = service.addNote(id, tenantContext.getTenantId(), request);
         return ResponseEntity
                 .created(URI.create(
                         "/api/v1/troubleTicket/" + id + "/note/" + note.getId()
