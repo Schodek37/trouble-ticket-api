@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: trouble-ticket-postgres
+    environment:
+      POSTGRES_DB: troubleticket
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d troubleticket"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trouble-ticket-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/troubleticket
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: secret
+      APP_SECURITY_JWT_SECRET: 70c9f9ab7c9f923f44a20d57b61b7774f96ad932ec5d43c4c253122df3b9b9ae
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
