@@ -1,4 +1,4 @@
-package pl.netia.troubleticket.configuration;
+package pl.netia.troubleticket.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
