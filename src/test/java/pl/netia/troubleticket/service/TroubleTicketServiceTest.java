@@ -17,7 +17,6 @@ import pl.netia.troubleticket.model.Note;
 import pl.netia.troubleticket.model.NoteCreateRequest;
 import pl.netia.troubleticket.model.TroubleTicket;
 import pl.netia.troubleticket.model.TroubleTicketCreateRequest;
-import pl.netia.troubleticket.model.TroubleTicketStatus;
 import pl.netia.troubleticket.model.TroubleTicketSummary;
 import pl.netia.troubleticket.repository.TroubleTicketRepository;
 
@@ -94,7 +93,7 @@ class TroubleTicketServiceTest {
         assertThat(result.created()).isTrue();
         assertThat(result.ticket().getId()).isEqualTo(TICKET_ID);
         assertThat(result.ticket().getStatus())
-                .isEqualTo(TroubleTicketStatus.ACKNOWLEDGED);
+                .isEqualTo(TroubleTicket.StatusEnum.ACKNOWLEDGED);
         verify(repository).save(any(TroubleTicketEntity.class));
     }
 
@@ -176,7 +175,7 @@ class TroubleTicketServiceTest {
 
         TroubleTicket result = service.close(TICKET_ID, TENANT_ID);
 
-        assertThat(result.getStatus()).isEqualTo(TroubleTicketStatus.CLOSED);
+        assertThat(result.getStatus()).isEqualTo(TroubleTicket.StatusEnum.CLOSED);
         verify(repository).save(ticketEntity);
     }
 
