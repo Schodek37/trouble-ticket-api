@@ -17,7 +17,6 @@ import pl.netia.troubleticket.model.Note;
 import pl.netia.troubleticket.model.NoteCreateRequest;
 import pl.netia.troubleticket.model.TroubleTicket;
 import pl.netia.troubleticket.model.TroubleTicketCreateRequest;
-import pl.netia.troubleticket.model.TroubleTicketCreateStatus;
 import pl.netia.troubleticket.model.TroubleTicketStatus;
 import pl.netia.troubleticket.model.TroubleTicketSummary;
 import pl.netia.troubleticket.repository.TroubleTicketRepository;
@@ -69,14 +68,14 @@ class TroubleTicketServiceTest {
         ticketDto.setExternalId(EXTERNAL_ID);
         ticketDto.setServiceId(123456789L);
         ticketDto.setDescription("Test description");
-        ticketDto.setStatus(TroubleTicketStatus.ACKNOWLEDGED);
+        ticketDto.setStatus(TroubleTicket.StatusEnum.ACKNOWLEDGED);
         ticketDto.setNotes(List.of());
 
         createRequest = new TroubleTicketCreateRequest();
         createRequest.setExternalId(EXTERNAL_ID);
         createRequest.setServiceId(123456789L);
         createRequest.setDescription("Test description");
-        createRequest.setStatus(TroubleTicketCreateStatus.NEW);
+        createRequest.setStatus(TroubleTicketCreateRequest.StatusEnum.NEW);
         createRequest.setNote("Initial note");
     }
 
@@ -171,7 +170,7 @@ class TroubleTicketServiceTest {
         when(repository.save(any(TroubleTicketEntity.class)))
                 .thenReturn(ticketEntity);
 
-        ticketDto.setStatus(TroubleTicketStatus.CLOSED);
+        ticketDto.setStatus(TroubleTicket.StatusEnum.CLOSED);
         when(mapper.toDto(ticketEntity))
                 .thenReturn(ticketDto);
 

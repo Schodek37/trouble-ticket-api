@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.netia.troubleticket.config.TestContainersConfig;
 import pl.netia.troubleticket.model.TroubleTicketCreateRequest;
-import pl.netia.troubleticket.model.TroubleTicketCreateStatus;
 import pl.netia.troubleticket.repository.TroubleTicketRepository;
 import pl.netia.troubleticket.security.JwtTestTokenGenerator;
 
@@ -194,7 +193,7 @@ class TroubleTicketControllerTest {
         request.setExternalId(externalId);
         request.setServiceId(987654321L);
         request.setDescription("Test description");
-        request.setStatus(TroubleTicketCreateStatus.NEW);
+        request.setStatus(TroubleTicketCreateRequest.StatusEnum.NEW);
         request.setNote("Initial note");
         return request;
     }

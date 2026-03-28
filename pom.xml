@@ -161,13 +161,16 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/trouble-ticket-api.yaml</inputSpec>
+							<ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+							<inputSpec>file:///${project.basedir}/src/main/resources/trouble-ticket-api.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>pl.netia.troubleticket.api</apiPackage>
 							<modelPackage>pl.netia.troubleticket.model</modelPackage>
+							<invokerPackage>pl.netia.troubleticket</invokerPackage>
 							<skipValidateSpec>true</skipValidateSpec>
 							<generateSupportingFiles>true</generateSupportingFiles>
 							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+							<apisToGenerate>TroubleTicket,TroubleTicketNote</apisToGenerate>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
 								<useSpringBoot3>true</useSpringBoot3>
