@@ -9,7 +9,7 @@ REST API zgodne z kontraktem OpenAPI. Spring Boot 3, Java 21, PostgreSQL.
 Wymagania: **Docker Desktop 4.x+**
 
 ```bash
-git clone https://github.com/[login]/trouble-ticket-api.git
+git clone https://github.com/Schodek37/trouble-ticket-api
 cd trouble-ticket-api
 docker-compose up --build
 ```
