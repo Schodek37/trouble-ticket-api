@@ -49,6 +49,17 @@ Alternatywnie: uruchomienie `JwtTestTokenGenerator.main()` z poziomu IDE.
 
 ---
 
+## Testowanie tenant isolation
+
+Wygeneruj tokeny dla dwóch różnych tenantów uruchamiając
+`JwtTestTokenGenerator` — generuje tokeny dla `TENANT_001`
+i `TENANT_002`.
+
+1. Utwórz zgłoszenie używając tokenu `TENANT_001`
+2. Skopiuj `id` z odpowiedzi
+3. Wykonaj `GET /troubleTicket/{id}` używając tokenu `TENANT_002`
+4. Otrzymasz `404` — tenant isolation działa poprawnie
+
 ## Testy
 
 Wszystkie (wymaga Dockera — Testcontainers)
@@ -172,3 +183,11 @@ Weryfikacja tokenu JWT opiera się na kluczu HMAC SHA-256. W środowisku produkc
 ### Sekret JWT w konfiguracji
 
 Sekret JWT znajduje się w `application.yml` i `docker-compose.yml`. Produkcyjnie powinien być dostarczany przez vault lub zewnętrzny secret manager.
+
+### 7. Podział API na dwa interfejsy i kontrolery
+
+Kontrakt definiuje dwa tagi: `TroubleTicket` i `TroubleTicketNote`.
+Zgodnie z tym podziałem zaimplementowano dwa osobne interfejsy i kontrolery:
+
+- `TroubleTicketApi` + `TroubleTicketController` — operacje na zgłoszeniach
+- `TroubleTicketNoteApi` + `TroubleTicketNoteController` — operacje na notatkach
