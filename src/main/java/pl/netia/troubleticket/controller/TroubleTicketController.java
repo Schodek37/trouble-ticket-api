@@ -71,17 +71,4 @@ public class TroubleTicketController implements TroubleTicketApi {
 
         return ResponseEntity.ok(service.close(id, tenantContext.getTenantId()));
     }
-
-    @Override
-    public ResponseEntity<Note> addTroubleTicketNote(
-            String id,
-            NoteCreateRequest request) {
-
-        Note note = service.addNote(id, tenantContext.getTenantId(), request);
-        return ResponseEntity
-                .created(URI.create(
-                        "/api/v1/troubleTicket/" + id + "/note/" + note.getId()
-                ))
-                .body(note);
-    }
 }
